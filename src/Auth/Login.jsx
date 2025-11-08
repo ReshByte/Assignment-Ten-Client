@@ -3,9 +3,11 @@ import { Link, useLocation, useNavigate } from "react-router";
 
 import { FaGoogle } from "react-icons/fa";
 import { AuthContext } from "../context/AuthContext";
+import Swal from "sweetalert2";
 
 const Login = () => {
   const { signInUser, signInWithGoogle } = use(AuthContext);
+
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -21,7 +23,7 @@ const Login = () => {
       .then((result) => {
         console.log(result.user);
         event.target.reset();
-        navigate(location.state || "/");
+        navigate(location?.state || "/");
       })
       .catch((error) => {
         console.log(error);
@@ -32,6 +34,11 @@ const Login = () => {
     signInWithGoogle()
       .then((result) => {
         console.log(result.user);
+        Swal.fire({
+  title: "Login Successful!",
+  text: "You clicked the button!",
+  icon: "success"
+});
         navigate(location?.state || "/");
       })
       .catch((error) => {
