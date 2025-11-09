@@ -1,7 +1,8 @@
-import React, { use, useEffect, useState} from 'react';
+import React, { use, useEffect, useState } from 'react';
 import axios from 'axios';
-import { AuthContext } from '../../context/AuthContext';
 
+import Swal from 'sweetalert2';
+import { AuthContext } from '../../context/AuthContext';
 
 const MyGallery = () => {
   const { user } = use(AuthContext);
@@ -14,6 +15,36 @@ const MyGallery = () => {
         .catch(err => console.log(err));
     }
   }, [user]);
+
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.delete(`http://localhost:5000/arts/${id}`)
+          .then(res => {
+            if (res.data.success) {
+              setArts(arts.filter(art => art._id !== id)); 
+              Swal.fire(
+                'Deleted!',
+                'Your artwork has been deleted.',
+                'success'
+              )
+            }
+          })
+          .catch(err => {
+            console.error(err);
+            Swal.fire('Error', 'Failed to delete artwork', 'error');
+          });
+      }
+    })
+  }
 
   if (!arts.length) return <p className="text-center mt-10 text-gray-600">You haven't added any artworks yet.</p>;
 
@@ -37,7 +68,10 @@ const MyGallery = () => {
             <button className="px-4 py-2 bg-gradient-to-r from-purple-600 to-rose-500 hover:from-rose-500 hover:to-purple-600 text-white rounded-lg transition">
               Update
             </button>
-            <button className="px-4 py-2 bg-gradient-to-r from-rose-500 to-purple-600 hover:from-purple-600 hover:to-rose-500 text-white rounded-lg transition">
+            <button 
+              onClick={() => handleDelete(art._id)}
+              className="px-4 py-2 bg-gradient-to-r from-rose-500 to-purple-600 hover:from-purple-600 hover:to-rose-500 text-white rounded-lg transition"
+            >
               Delete
             </button>
           </div>

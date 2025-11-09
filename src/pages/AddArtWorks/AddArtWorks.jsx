@@ -1,6 +1,7 @@
-import React, { use, useContext } from 'react';
-
+import React, { use } from 'react';
 import { useNavigate } from 'react-router';
+
+import Swal from 'sweetalert2';
 import { AuthContext } from '../../context/AuthContext';
 
 const AddArtWorks = () => {
@@ -28,14 +29,41 @@ const AddArtWorks = () => {
       body: JSON.stringify(formData)
     })
     .then(res => res.json())
-    .then(() => navigate('/myGallery'))
-    .catch(err => console.log(err));
+    .then(data => {
+      if (data.result?.insertedId) { 
+        Swal.fire({
+          title: "Artwork Added Successfully!",
+          text: "Your artwork has been saved.",
+          icon: "success",
+          confirmButtonColor: "#6b21a8", 
+        });
+        navigate('/addArtworks');
+      } else {
+        Swal.fire({
+          title: "Failed to Add",
+          text: "Something went wrong, please try again.",
+          icon: "error",
+          confirmButtonColor: "#dc2626",
+        });
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      Swal.fire({
+        title: "Error",
+        text: "Failed to add artwork",
+        icon: "error",
+        confirmButtonColor: "#dc2626",
+      });
+    });
   };
 
   return (
     <section className="min-h-screen flex items-center justify-center px-4 py-10">
       <form onSubmit={handleSubmit} className="bg-white/80 p-8 rounded-2xl shadow-xl w-full max-w-lg">
-        <h2 className="text-3xl font-bold text-center mb-6">➕ Add New Artwork</h2>
+        <h2 className="text-3xl font-bold text-center mb-6 bg-gradient-to-r from-rose-600 to-purple-700 bg-clip-text text-transparent">
+          ➕ Add New Artwork
+        </h2>
 
         <div className="space-y-4">
           <input type="text" name="image" placeholder="Image URL" required className="input input-bordered w-full" />
@@ -52,7 +80,7 @@ const AddArtWorks = () => {
           <input type="text" name="artist" value={user?.displayName || ""} readOnly className="input input-bordered w-full bg-gray-100" />
           <input type="email" name="email" value={user?.email || ""} readOnly className="input input-bordered w-full bg-gray-100" />
 
-          <button type="submit" className="w-full mt-4 py-3 rounded-lg text-white bg-gradient-to-r from-purple-600 to-rose-500">
+          <button type="submit" className="w-full mt-4 py-3 rounded-lg text-white bg-gradient-to-r from-purple-600 to-rose-500 hover:from-rose-500 hover:to-purple-600 transition-all">
             Add Artwork
           </button>
         </div>
