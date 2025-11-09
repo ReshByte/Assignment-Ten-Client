@@ -23,7 +23,8 @@ export const router = createBrowserRouter([
       },
       {
         path:"/exploreArtworks",
-        element:<ExploreArtworks></ExploreArtworks>
+        element:<ExploreArtworks></ExploreArtworks>,
+        loader: ()=> fetch('http://localhost:5000/arts'),
       },
        {
         path:"/addArtworks",
