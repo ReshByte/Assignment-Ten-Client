@@ -8,6 +8,8 @@ import AddArtWorks from "../pages/AddArtWorks/AddArtWorks";
 import MyGallery from "../pages/MyGallery/MyGallery";
 import MyFavorites from "../pages/MyFavorites/MyFavorites";
 import PrivateRoute from "./PrivateRoute";
+import NotFound from "../pages/notfound/NotFound";
+import ExplorerDetails from "../pages/explorerDetails/ExplorerDetails";
 
 
 
@@ -24,7 +26,7 @@ export const router = createBrowserRouter([
       {
         path:"/exploreArtworks",
         element:<ExploreArtworks></ExploreArtworks>,
-        loader: ()=> fetch('http://localhost:5000/arts'),
+        loader: () => fetch('http://localhost:5000/arts'),
       },
        {
         path:"/addArtworks",
@@ -48,6 +50,14 @@ export const router = createBrowserRouter([
         </PrivateRoute>,
       },
       {
+        path:"/explorer-details/:id",
+        element: <PrivateRoute>
+            <ExplorerDetails>
+            </ExplorerDetails>
+        </PrivateRoute>,
+        loader: ({params}) => fetch(`http://localhost:5000/arts/${params.id}`)
+      },
+      {
         path: "/auth/login",
         element: <Login></Login>,
       },
@@ -55,6 +65,13 @@ export const router = createBrowserRouter([
         path: "/auth/register",
         element: <Registration></Registration>,
       },
-        ]
+     
+        ],
+       
     }
+    ,
+      {
+      path:"*",
+      element:<NotFound></NotFound>
+     },
 ])

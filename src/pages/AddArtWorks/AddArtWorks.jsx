@@ -6,18 +6,31 @@ const AddArtWorks = () => {
 
     const handleSubmit = (e) =>{
         e.preventDefault();
-        const image = e.target.image.value;
-        const title = e.target.title.value;
-        const category = e.target.category.value;
-        const tools = e.target.tools.value;
-        const description = e.target.description.value;
-        const dimension = e.target.dimension.value;
-        const price = e.target.price.value;
-        const visibility = e.target.visibility.value;
-        const anonymous = e.target.anonymous.value;
-        const email = e.target.email.value;
+       const formData = {
+        imageURL : e.target.image.value,
+        title : e.target.title.value,
+        category : e.target.category.value,
+        medium : e.target.tools.value,
+        description : e.target.description.value,
+        dimension : e.target.dimension.value,
+        price : e.target.price.value,
+        visibility : e.target.visibility.value,
+        artist : e.target.artist.value,
+        email : e.target.email.value
+       }
 
-        console.log(image,title,category,tools,description,dimension,price,visibility,anonymous,email);
+       fetch('http://localhost:5000/arts', {
+        method: 'POST',
+        headers: {
+            "Content-Type":"application/json",
+        },
+        body: JSON.stringify(formData)
+       })
+       .then( res => res.json())
+       .catch(err => {
+        console.log(err);
+       })
+       
     }
 
   return (
@@ -85,7 +98,7 @@ const AddArtWorks = () => {
 
           <input
             type="text"
-            name='anonymous'
+            name='artist'
             value={`${user && user.displayName}`}
             readOnly
             className="input input-bordered w-full bg-gray-100"

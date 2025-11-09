@@ -1,7 +1,8 @@
 import React from "react";
+import { Link } from "react-router";
 
 const Card = ({ get }) => {
-  const { imageURL, title, artist, category, likes } = get || {};
+  const { imageURL, title, artist, category, likes , _id} = get || {};
 
   if (!get) return null;
 
@@ -31,9 +32,9 @@ const Card = ({ get }) => {
         {/* Likes and Button */}
         <div className="flex items-center justify-between mt-4">
           <span className="text-sm text-gray-700">❤️ {likes || 0}</span>
-          <button className="px-4 py-2 bg-gradient-to-r from-pink-400 to-purple-500 text-white text-sm font-medium rounded-lg shadow-md hover:brightness-105 transition-all duration-200">
+          <Link to={`/explorer-details/${_id}`} className="px-4 py-2 bg-gradient-to-r from-pink-400 to-purple-500 text-white text-sm font-medium rounded-lg shadow-md hover:brightness-105 transition-all duration-200">
             View Details
-          </button>
+          </Link>
         </div>
       </div>
     </div>
