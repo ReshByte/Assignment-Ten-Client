@@ -43,11 +43,12 @@ export const router = createBrowserRouter([
         </PrivateRoute>,
       },
        {
-        path:"/myFavorites",
+        path:"/myFavorites/:id",
         element:<PrivateRoute>
             <MyFavorites>
             </MyFavorites>
         </PrivateRoute>,
+         loader: ({params}) => fetch(`http://localhost:5000/arts/${params.id}`)
       },
       {
         path:"/explorer-details/:id",
