@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useState,  useEffect, use } from "react";
 import { useLoaderData, Link } from "react-router";
 import Swal from "sweetalert2";
+import axios from "axios";
+import { AuthContext } from "../../context/AuthContext";
+
 
 const ExplorerDetails = () => {
+  const { user } = use(AuthContext);
   const data = useLoaderData();
   const singleData = data.result;
 
-  // Destructure all values
   const {
     imageURL,
     title,
@@ -17,29 +20,59 @@ const ExplorerDetails = () => {
     price,
     visibility,
     artist,
-    email,
-    likes,
     _id,
+    likes,
   } = singleData || {};
 
-  // Local state only
   const [likeCount, setLikeCount] = useState(likes || 0);
   const [isFavorite, setIsFavorite] = useState(false);
 
-  // Handle Like (frontend only)
-  const handleLike = () => {
-    setLikeCount((prev) => prev + 1);
-  };
 
-  // Handle Add to Favorites (frontend only)
-  const handleAddToFavorites = () => {
-    setIsFavorite(true);
-    Swal.fire({
-      title: "Added to Favorites ❤️",
-      text: `"${title}" has been added successfully!`,
-      icon: "success",
-      confirmButtonColor: "#ec4899",
-    });
+  useEffect(() => {
+    if (user?.email) {
+      axios
+        .get(`http://localhost:5000/favorites?email=${user.email}`)
+        .then((res) => {
+          const exists = res.data.find((fav) => fav.artId === _id);
+          if (exists) setIsFavorite(true);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [_id, user]);
+
+  const handleLike = () => setLikeCount((prev) => prev + 1);
+
+  const handleAddToFavorites = async () => {
+    if (!user?.email) {
+      Swal.fire("Please login first", "", "warning");
+      return;
+    }
+
+    const favoriteData = {
+      artId: _id,
+      title,
+      artist,
+      category,
+      imageURL,
+      userEmail: user.email,
+    };
+
+    try {
+      const res = await axios.post("http://localhost:5000/favorites", favoriteData);
+      if (res.data.success) {
+        setIsFavorite(true);
+        Swal.fire({
+          title: "Added to Favorites ❤️",
+          text: `"${title}" has been added successfully!`,
+          icon: "success",
+          confirmButtonColor: "#ec4899",
+        });
+      } else {
+        Swal.fire("Already in Favorites", "", "info");
+      }
+    } catch (error) {
+      Swal.fire("Error", "Failed to add to favorites", "error");
+    }
   };
 
   return (
@@ -66,15 +99,10 @@ const ExplorerDetails = () => {
           {description || "No description available for this artwork."}
         </p>
 
-        {/* Grid Info */}
         <div className="grid grid-cols-2 gap-6 mt-4">
           <div>
             <p className="font-semibold text-gray-700">Artist</p>
             <p className="text-purple-600">{artist}</p>
-          </div>
-          <div>
-            <p className="font-semibold text-gray-700">Email</p>
-            <p className="text-pink-600">{email}</p>
           </div>
           <div>
             <p className="font-semibold text-gray-700">Dimensions</p>
@@ -83,6 +111,10 @@ const ExplorerDetails = () => {
           <div>
             <p className="font-semibold text-gray-700">Price</p>
             <p className="text-2xl font-semibold text-purple-700">${price}</p>
+          </div>
+          <div>
+            <p className="font-semibold text-gray-700">Likes</p>
+            <p className="text-gray-600">{likeCount}</p>
           </div>
         </div>
 

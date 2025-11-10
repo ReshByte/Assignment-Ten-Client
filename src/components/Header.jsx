@@ -1,12 +1,22 @@
-import React, { use } from "react";
+import React, {  use, useEffect, useState } from "react";
 import { Link, NavLink } from "react-router";
 import artify from "../assets/Artify-logo.png";
 import { AuthContext } from "../context/AuthContext";
-import Swal from "sweetalert2";
+
 
 const Header = () => {
   const { user, signOutUser } = use(AuthContext);
-  
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  const handleThemeToggle = (checked) => {
+    setTheme(checked ? "dark" : "light");
+  };
+
   const navLinkClass = ({ isActive }) =>
     `px-4 py-2 rounded-md font-medium tracking-wide transition-all duration-300 ${
       isActive
@@ -17,7 +27,6 @@ const Header = () => {
   return (
     <header className="sticky top-0 z-50 bg-gradient-to-r from-rose-50 via-white to-purple-50 backdrop-blur-md border-b border-purple-100 shadow-sm">
       <nav className="max-w-7xl mx-auto flex items-center justify-between px-4 py-3 md:py-4">
-        
         <Link to="/" className="flex items-center gap-2">
           <img
             src={artify}
@@ -29,7 +38,6 @@ const Header = () => {
           </span>
         </Link>
 
-        {/* Center Menu */}
         <ul className="hidden md:flex items-center gap-2">
           <li><NavLink to="/" className={navLinkClass}>Home</NavLink></li>
           <li><NavLink to="/exploreArtworks" className={navLinkClass}>Explore</NavLink></li>
@@ -38,13 +46,33 @@ const Header = () => {
           <li><NavLink to="/myFavorites" className={navLinkClass}>Favorites</NavLink></li>
         </ul>
 
-        {/* Right — User / Auth Buttons */}
         <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <label className="swap swap-rotate">
+              <input
+                type="checkbox"
+                checked={theme === "dark"}
+                onChange={(e) => handleThemeToggle(e.target.checked)}
+              />
+              <svg
+                className="swap-on fill-current w-6 h-6 text-yellow-400"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+              >
+                <path d="M5.64 17.657l1.414-1.414-1.414-1.414-1.414 1.414 1.414 1.414zm12.728-12.728l1.414-1.414-1.414-1.414-1.414 1.414 1.414 1.414zM12 5a1 1 0 011-1h0a1 1 0 010 2h0a1 1 0 01-1-1zm0 12a1 1 0 011-1h0a1 1 0 010 2h0a1 1 0 01-1-1zm6-6a1 1 0 011-1h0a1 1 0 010 2h0a1 1 0 01-1-1zm-12 0a1 1 0 011-1h0a1 1 0 010 2h0a1 1 0 01-1-1zm9.071 5.071l1.414-1.414-1.414-1.414-1.414 1.414 1.414 1.414zm-9.9-9.9l1.414-1.414-1.414-1.414-1.414 1.414 1.414 1.414zM12 7a5 5 0 100 10 5 5 0 000-10z"/>
+              </svg>
+              <svg
+                className="swap-off fill-current w-6 h-6 text-gray-800"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+              >
+                <path d="M21.752 15.002A9 9 0 1112 3a7 7 0 009.752 12.002z"/>
+              </svg>
+            </label>
+          </div>
+
           {user && (
-            <div
-              className="tooltip tooltip-bottom"
-              data-tip={user.displayName || "User"}
-            >
+            <div className="tooltip tooltip-bottom" data-tip={user.displayName || "User"}>
               <img
                 src={
                   user.photoURL ||
@@ -55,7 +83,6 @@ const Header = () => {
               />
             </div>
           )}
-
           {user ? (
             <button
               onClick={signOutUser}
@@ -81,7 +108,6 @@ const Header = () => {
           )}
         </div>
 
-        {/* Mobile Menu */}
         <div className="dropdown md:hidden">
           <div tabIndex={0} role="button" className="btn btn-ghost">
             <svg
@@ -91,12 +117,7 @@ const Header = () => {
               viewBox="0 0 24 24"
               stroke="currentColor"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h16m-8 6h8"
-              />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-8 6h8" />
             </svg>
           </div>
           <ul
@@ -108,31 +129,6 @@ const Header = () => {
             <li><NavLink to="/addArtworks" className={navLinkClass}>Add Artwork</NavLink></li>
             <li><NavLink to="/myGallery" className={navLinkClass}>My Gallery</NavLink></li>
             <li><NavLink to="/myFavorites" className={navLinkClass}>Favorites</NavLink></li>
-            <li className="mt-2 border-t pt-2">
-              {user ? (
-                <button
-                  onClick={signOutUser}
-                  className="btn btn-sm bg-gradient-to-r from-purple-600 to-rose-500 text-white border-none"
-                >
-                  Logout
-                </button>
-              ) : (
-                <>
-                  <Link
-                    to="/auth/login"
-                    className="btn btn-sm bg-gradient-to-r from-purple-600 to-rose-500 text-white border-none mb-1"
-                  >
-                    Login
-                  </Link>
-                  <Link
-                    to="/auth/register"
-                    className="btn btn-sm bg-gradient-to-r from-rose-500 to-purple-600 text-white border-none"
-                  >
-                    Register
-                  </Link>
-                </>
-              )}
-            </li>
           </ul>
         </div>
       </nav>
