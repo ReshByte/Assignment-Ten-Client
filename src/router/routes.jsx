@@ -10,6 +10,7 @@ import MyFavorites from "../pages/MyFavorites/MyFavorites";
 import PrivateRoute from "./PrivateRoute";
 import NotFound from "../pages/notfound/NotFound";
 import ExplorerDetails from "../pages/explorerDetails/ExplorerDetails";
+import Loading from "../home/Loading";
 
 export const router = createBrowserRouter([
   {
@@ -20,11 +21,13 @@ export const router = createBrowserRouter([
         path: "/",
         element: <Home></Home>,
         loader: () => fetch("http://localhost:5000/arts/latest"),
+        hydrateFallbackElement:<Loading></Loading>
       },
       {
         path: "/exploreArtworks",
         element: <ExploreArtworks></ExploreArtworks>,
         loader: () => fetch("http://localhost:5000/arts"),
+        hydrateFallbackElement:<Loading></Loading>
       },
       {
         path: "/addArtworks",
@@ -50,6 +53,7 @@ export const router = createBrowserRouter([
           </PrivateRoute>
         ),
         loader: () => fetch("http://localhost:5000/favorites"),
+        hydrateFallbackElement:<Loading></Loading>
       },
       {
         path: "/explorer-details/:id",
@@ -60,6 +64,7 @@ export const router = createBrowserRouter([
         ),
         loader: ({ params }) =>
           fetch(`http://localhost:5000/arts/${params.id}`),
+        hydrateFallbackElement:<Loading></Loading>
       },
       {
         path: "/auth/login",
