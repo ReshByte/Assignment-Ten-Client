@@ -1,6 +1,5 @@
 import React, { use } from 'react';
 import { useNavigate } from 'react-router';
-
 import Swal from 'sweetalert2';
 import { AuthContext } from '../../context/AuthContext';
 
@@ -19,8 +18,8 @@ const AddArtWorks = () => {
       dimension: e.target.dimension.value,
       price: e.target.price.value,
       visibility: e.target.visibility.value,
-      artist: e.target.artist.value,
-      email: e.target.email.value
+      artist: user?.displayName,
+      email: user?.email
     };
 
     fetch('http://localhost:5000/arts', {
@@ -33,15 +32,13 @@ const AddArtWorks = () => {
       if (data.result?.insertedId) { 
         Swal.fire({
           title: "Artwork Added Successfully!",
-          text: "Your artwork has been saved.",
           icon: "success",
-          confirmButtonColor: "#6b21a8", 
+          confirmButtonColor: "#6b21a8"
         });
-        navigate('/addArtworks');
+        navigate('/myGallery'); // go to MyGallery
       } else {
         Swal.fire({
           title: "Failed to Add",
-          text: "Something went wrong, please try again.",
           icon: "error",
           confirmButtonColor: "#dc2626",
         });
@@ -77,8 +74,8 @@ const AddArtWorks = () => {
             <option>Public</option>
             <option>Private</option>
           </select>
-          <input type="text" name="artist" value={user?.displayName || ""} readOnly className="input input-bordered w-full bg-gray-100" />
-          <input type="email" name="email" value={user?.email || ""} readOnly className="input input-bordered w-full bg-gray-100" />
+          <input type="text" value={user?.displayName || ""} readOnly className="input input-bordered w-full bg-gray-100" />
+          <input type="email" value={user?.email || ""} readOnly className="input input-bordered w-full bg-gray-100" />
 
           <button type="submit" className="w-full mt-4 py-3 rounded-lg text-white bg-gradient-to-r from-purple-600 to-rose-500 hover:from-rose-500 hover:to-purple-600 transition-all">
             Add Artwork
