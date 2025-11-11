@@ -11,11 +11,13 @@ const Home = () => {
         <div>
             <div className=''>
                 <Banner></Banner>
-                <TypeMotion></TypeMotion>
+               <div className='mt-120'>
+                 <TypeMotion></TypeMotion>
                 <LatestSixCard></LatestSixCard>
                 <RevealCard></RevealCard>
                 <TopArtists></TopArtists>
                 <CommunityHighlights></CommunityHighlights>
+               </div>
             </div>
             
         </div>

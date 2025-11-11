@@ -1,12 +1,11 @@
-import React, { useState,  useEffect, use } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useLoaderData, Link } from "react-router";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 
-
 const ExplorerDetails = () => {
-  const { user } = use(AuthContext);
+  const { user } = useContext(AuthContext);
   const data = useLoaderData();
   const singleData = data.result;
 
@@ -27,7 +26,6 @@ const ExplorerDetails = () => {
   const [likeCount, setLikeCount] = useState(likes || 0);
   const [isFavorite, setIsFavorite] = useState(false);
 
-
   useEffect(() => {
     if (user?.email) {
       axios
@@ -40,7 +38,21 @@ const ExplorerDetails = () => {
     }
   }, [_id, user]);
 
-  const handleLike = () => setLikeCount((prev) => prev + 1);
+  const handleLike = async () => {
+    if (!user?.email) {
+      Swal.fire("Please login first", "", "warning");
+      return;
+    }
+
+    try {
+      const res = await axios.post(`http://localhost:5000/arts/${_id}/like`);
+      if (res.data.success) {
+        setLikeCount(res.data.likes);
+      }
+    } catch (err) {
+      Swal.fire("Error", "Failed to like the artwork", "error");
+    }
+  };
 
   const handleAddToFavorites = async () => {
     if (!user?.email) {
@@ -77,7 +89,6 @@ const ExplorerDetails = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-rose-50 to-purple-50 flex flex-col lg:flex-row items-center justify-center px-6 py-12 gap-10">
-      {/* Image Section */}
       <div className="lg:w-1/2 w-full flex flex-col items-center">
         <div className="w-full max-w-md rounded-2xl overflow-hidden shadow-xl bg-white border border-gray-200">
           <img
@@ -88,7 +99,6 @@ const ExplorerDetails = () => {
         </div>
       </div>
 
-      {/* Info Section */}
       <div className="lg:w-1/2 w-full space-y-5">
         <h2 className="text-3xl font-bold text-gray-800">{title}</h2>
         <p className="text-sm text-gray-500 font-medium uppercase tracking-wide">
@@ -118,7 +128,6 @@ const ExplorerDetails = () => {
           </div>
         </div>
 
-        {/* Buttons */}
         <div className="flex gap-4 mt-6">
           <button
             onClick={handleLike}
@@ -140,7 +149,6 @@ const ExplorerDetails = () => {
           </button>
         </div>
 
-        {/* Back Button */}
         <Link
           to="/exploreArtworks"
           className="inline-block mt-8 px-6 py-2 bg-gradient-to-r from-pink-400 to-purple-500 text-white font-medium rounded-lg shadow-md hover:scale-105 transition-transform"

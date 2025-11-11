@@ -1,10 +1,10 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
 
-const videos = [
-  "https://cdn.dribbble.com/userupload/44360845/file/4988e26dadf995df34b5bfde3d04d45d.mp4",
-  "https://cdn.dribbble.com/userupload/44953456/file/76723a83e127562547a28df5001d257b.webm",
-  "https://cdn.dribbble.com/userupload/16569515/file/original-d99071d642c8efd87400222a0c344e1a.mp4",
+const images = [
+  "https://i.ibb.co/Z69s8bWs/pexels-photo-7763082.jpg",
+  "https://i.ibb.co/6ctc0c1n/pexels-nazila-18540736.jpg",
+  "https://i.ibb.co/FbfxsJPS/pexels-steve-2130475.jpg",
 ];
 
 const Banner = () => {
@@ -13,35 +13,31 @@ const Banner = () => {
   // Auto-play the carousel every 6 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % videos.length);
+      setCurrent((prev) => (prev + 1) % images.length);
     }, 6000);
     return () => clearInterval(interval);
   }, []);
 
   const prevSlide = () =>
-    setCurrent((current - 1 + videos.length) % videos.length);
-  const nextSlide = () => setCurrent((current + 1) % videos.length);
+    setCurrent((current - 1 + images.length) % images.length);
+  const nextSlide = () => setCurrent((current + 1) % images.length);
 
   return (
-    <>
     <div className="absolute w-full flex top-0 left-0 justify-center mt-30">
       <div className="max-w-7xl mx-auto">
-        <div className="relative w-full overflow-hidden bg-black rounded-2xl shadow-2xl">
+        <div className="relative w-full overflow-hidden rounded-2xl shadow-2xl">
           <div
             className="flex transition-transform duration-700 ease-in-out"
             style={{ transform: `translateX(-${current * 100}%)` }}
           >
-            {videos.map((src, i) => (
+            {images.map((src, i) => (
               <div key={i} className="w-full shrink-0 relative">
-                <video
+                <img
                   src={src}
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
+                  alt={`Slide ${i + 1}`}
                   className="w-full h-[60vh] object-cover brightness-90"
                 />
-                <div className="absolute inset-0 bg-linear-to-t from-black/40 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
               </div>
             ))}
           </div>
@@ -62,7 +58,7 @@ const Banner = () => {
 
           {/* Dots indicator */}
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-            {videos.map((_, i) => (
+            {images.map((_, i) => (
               <button
                 key={i}
                 onClick={() => setCurrent(i)}
@@ -74,9 +70,8 @@ const Banner = () => {
           </div>
         </div>
       </div>
+      <div className="mb-[500px]"></div>
     </div>
-    <div className="mb-[500px]"></div>
-    </>
   );
 };
 
