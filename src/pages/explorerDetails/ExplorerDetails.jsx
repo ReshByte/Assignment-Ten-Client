@@ -5,7 +5,7 @@ import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 
 const ExplorerDetails = () => {
-  const { user } = useContext(AuthContext);
+  const { user ,setLoading} = useContext(AuthContext);
   const data = useLoaderData();
   const singleData = data.result;
 
@@ -47,6 +47,7 @@ const ExplorerDetails = () => {
     try {
       const res = await axios.post(`http://localhost:5000/arts/${_id}/like`);
       if (res.data.success) {
+       
         setLikeCount(res.data.likes);
       }
     } catch (err) {
