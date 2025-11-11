@@ -4,6 +4,7 @@ import LatestSixCard from './LatestSixCard';
 import TopArtists from './TopArtists';
 import CommunityHighlights from './CommunityHighlights';
 import TypeMotion from './TypeMotion';
+import RevealCard from './RevealCard';
 
 const Home = () => {
     return (
@@ -12,6 +13,7 @@ const Home = () => {
                 <Banner></Banner>
                 <TypeMotion></TypeMotion>
                 <LatestSixCard></LatestSixCard>
+                <RevealCard></RevealCard>
                 <TopArtists></TopArtists>
                 <CommunityHighlights></CommunityHighlights>
             </div>

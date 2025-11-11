@@ -16,7 +16,7 @@ const TypeMotion = () => {
             "Connect through appreciation and interaction 🤝",
             "Experience a modern, clean, and artistic UI 🌈",
           ]}
-          loop={0} // 0 = infinite loop
+          loop={0} 
           cursor
           cursorStyle="|"
           typeSpeed={80}
