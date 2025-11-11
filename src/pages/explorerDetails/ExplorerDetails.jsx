@@ -5,7 +5,7 @@ import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 
 const ExplorerDetails = () => {
-  const { user ,setLoading} = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const data = useLoaderData();
   const singleData = data.result;
 
@@ -23,9 +23,12 @@ const ExplorerDetails = () => {
     likes,
   } = singleData || {};
 
+  // Initialize like count from loader
   const [likeCount, setLikeCount] = useState(likes || 0);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [liked, setLiked] = useState(false);
 
+  // Check if this artwork is already in favorites
   useEffect(() => {
     if (user?.email) {
       axios
@@ -38,26 +41,48 @@ const ExplorerDetails = () => {
     }
   }, [_id, user]);
 
+  // Handle Like button click
   const handleLike = async () => {
     if (!user?.email) {
       Swal.fire("Please login first", "", "warning");
       return;
     }
 
+    if (liked) {
+      Swal.fire("You already liked this artwork!", "", "info");
+      return;
+    }
+
     try {
       const res = await axios.post(`http://localhost:5000/arts/${_id}/like`);
-      if (res.data.success) {
-       
-        setLikeCount(res.data.likes);
+      console.log(res);
+      if (res.data) {
+        setLikeCount(res.data.likes); 
+        setLiked(true); 
+        Swal.fire({
+          title: "Liked ❤️",
+          text: `You liked "${title}"`,
+          icon: "success",
+          confirmButtonColor: "#ec4899",
+        });
+      } else {
+        Swal.fire("Failed to like the artwork", "", "error");
       }
     } catch (err) {
+      console.log(err);
       Swal.fire("Error", "Failed to like the artwork", "error");
     }
   };
 
+ 
   const handleAddToFavorites = async () => {
     if (!user?.email) {
       Swal.fire("Please login first", "", "warning");
+      return;
+    }
+
+    if (isFavorite) {
+      Swal.fire("Already in Favorites", "", "info");
       return;
     }
 
@@ -83,13 +108,15 @@ const ExplorerDetails = () => {
       } else {
         Swal.fire("Already in Favorites", "", "info");
       }
-    } catch (error) {
+    } catch (err) {
+      console.log(err);
       Swal.fire("Error", "Failed to add to favorites", "error");
     }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-rose-50 to-purple-50 flex flex-col lg:flex-row items-center justify-center px-6 py-12 gap-10">
+     
       <div className="lg:w-1/2 w-full flex flex-col items-center">
         <div className="w-full max-w-md rounded-2xl overflow-hidden shadow-xl bg-white border border-gray-200">
           <img
@@ -100,6 +127,7 @@ const ExplorerDetails = () => {
         </div>
       </div>
 
+     
       <div className="lg:w-1/2 w-full space-y-5">
         <h2 className="text-3xl font-bold text-gray-800">{title}</h2>
         <p className="text-sm text-gray-500 font-medium uppercase tracking-wide">
@@ -129,10 +157,16 @@ const ExplorerDetails = () => {
           </div>
         </div>
 
+        {/* Buttons */}
         <div className="flex gap-4 mt-6">
           <button
             onClick={handleLike}
-            className="flex items-center gap-2 px-5 py-2 rounded-lg bg-gradient-to-r from-pink-400 to-purple-500 text-white font-medium shadow-md hover:scale-105 transition-transform"
+            disabled={liked}
+            className={`flex items-center gap-2 px-5 py-2 rounded-lg font-medium shadow-md transition-transform ${
+              liked
+                ? "bg-gray-400 text-white cursor-not-allowed"
+                : "bg-gradient-to-r from-pink-400 to-purple-500 text-white hover:scale-105"
+            }`}
           >
             ❤️ Like <span>({likeCount})</span>
           </button>

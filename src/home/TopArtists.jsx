@@ -18,7 +18,7 @@ const TopArtists = () => {
 
   return (
     <section className="max-w-7xl mx-auto px-4 py-16">
-      <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-12 bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 bg-clip-text text-transparent">
+      <h2 className="text-3xl md:text-4xl font-extrabold  text-center mb-12 bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 bg-clip-text text-transparent">
         Top Artists of the Week
       </h2>
 
