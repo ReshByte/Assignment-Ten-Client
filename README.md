@@ -1,16 +1,19 @@
-# React + Vite
+# Artify
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Artify is an online art-sharing platform where artists can upload and display their creative works, explore other artists’ galleries, curate favorites, and connect through appreciation and interaction. The website emphasizes creativity, modern UI, and clean navigation for art lovers.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Upload & Showcase Artworks:** Artists can upload their creations and display them beautifully on their personal gallery.  
+- **Explore Galleries:** Users can browse and explore artworks from different artists across various categories.  
+- **Favorites System:** Users can save their favorite artworks for easy access and curation.  
+- **Interactive Like System:** Users can like artworks, showing appreciation to artists and increasing engagement.  
+- **Modern UI & Smooth Navigation:** The website is designed with a clean and modern interface for an enjoyable user experience.  
 
-## React Compiler
+## Technologies Used
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- Frontend: React, Tailwind CSS  
+- Backend: Node.js, Express.js  
+- Database: MongoDB  
+- Authentication: Context API  
+- Animations: React Awesome Reveal, AOS, React Simple Typewriter
