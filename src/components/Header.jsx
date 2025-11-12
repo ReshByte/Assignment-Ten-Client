@@ -6,6 +6,7 @@ import { AuthContext } from "../context/AuthContext";
 const Header = () => {
   const { user, signOutUser } = useContext(AuthContext);
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+  const [showTooltip, setShowTooltip] = useState(false);
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
@@ -27,7 +28,6 @@ const Header = () => {
     <header className="sticky top-0 z-50 bg-gradient-to-r from-rose-50 via-white to-purple-50 backdrop-blur-md border-b border-purple-100 shadow-sm">
       <div className="max-w-[1480px] mx-auto px-4 sm:px-6 md:px-10 lg:px-16 xl:px-24">
         <nav className="flex items-center justify-between py-3">
-       
           <Link to="/" className="flex items-center gap-2 shrink-0">
             <img
               src={artify}
@@ -39,7 +39,6 @@ const Header = () => {
             </span>
           </Link>
 
-       
           <ul className="hidden md:flex items-center gap-2 lg:gap-3">
             <li><NavLink to="/" className={navLinkClass}>Home</NavLink></li>
             <li><NavLink to="/exploreArtworks" className={navLinkClass}>Explore</NavLink></li>
@@ -48,9 +47,7 @@ const Header = () => {
             <li><NavLink to="/myFavorites" className={navLinkClass}>Favorites</NavLink></li>
           </ul>
 
-        
           <div className="flex items-center gap-2 sm:gap-3">
-           
             <label className="swap swap-rotate">
               <input
                 type="checkbox"
@@ -73,11 +70,12 @@ const Header = () => {
               </svg>
             </label>
 
-
             {user && (
               <div
-                className="tooltip tooltip-bottom hidden sm:block"
-                data-tip={user.displayName || "User"}
+                className="relative"
+                onMouseEnter={() => setShowTooltip(true)}
+                onMouseLeave={() => setShowTooltip(false)}
+                onTouchStart={() => setShowTooltip(!showTooltip)}
               >
                 <img
                   src={
@@ -85,12 +83,17 @@ const Header = () => {
                     "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
                   }
                   alt="User"
-                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border-2 border-purple-400 hover:scale-105 shadow-sm transition-transform"
+                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border-2 border-purple-400 hover:scale-105 shadow-sm transition-transform cursor-pointer"
                 />
+                {showTooltip && (
+                  <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-purple-700 text-white text-xs px-2 py-1 rounded-md shadow-lg whitespace-nowrap">
+                    {user.displayName || "User"}
+                  </div>
+                )}
               </div>
             )}
 
-             <div className="hidden sm:flex items-center gap-2">
+            <div className="hidden sm:flex items-center gap-2">
               {user ? (
                 <button
                   onClick={signOutUser}
@@ -116,7 +119,6 @@ const Header = () => {
               )}
             </div>
 
-           
             <div className="dropdown dropdown-end md:hidden">
               <div tabIndex={0} role="button" className="btn btn-ghost p-1">
                 <svg
