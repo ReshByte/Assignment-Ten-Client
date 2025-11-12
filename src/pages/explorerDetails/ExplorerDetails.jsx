@@ -113,7 +113,7 @@ const ExplorerDetails = () => {
       Swal.fire("Error", "Failed to add to favorites", "error");
     }
   };
-
+// design
   return (
     <div className="min-h-screen bg-gradient-to-br from-rose-50 to-purple-50 flex flex-col lg:flex-row items-center justify-center px-6 py-12 gap-10">
      
@@ -182,8 +182,8 @@ const ExplorerDetails = () => {
           >
             ⭐ {isFavorite ? "Added to Favorites" : "Add to Favorites"}
           </button>
+          
         </div>
-
         <Link
           to="/exploreArtworks"
           className="inline-block mt-8 px-6 py-2 bg-gradient-to-r from-pink-400 to-purple-500 text-white font-medium rounded-lg shadow-md hover:scale-105 transition-transform"
