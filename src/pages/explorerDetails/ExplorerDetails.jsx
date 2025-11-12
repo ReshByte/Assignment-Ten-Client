@@ -19,20 +19,35 @@ const ExplorerDetails = () => {
     price,
     visibility,
     artist,
+    artistPhoto,
+    artistEmail,
     _id,
     likes,
   } = singleData || {};
 
-  // Initialize like count from loader
   const [likeCount, setLikeCount] = useState(likes || 0);
   const [isFavorite, setIsFavorite] = useState(false);
   const [liked, setLiked] = useState(false);
+  const [totalArtworks, setTotalArtworks] = useState(0);
 
-  // Check if this artwork is already in favorites
+  useEffect(() => {
+    if (artistEmail) {
+      axios
+        .get(
+          `https://assignment-ten-server-ten-theta.vercel.app/arts?artistEmail=${artistEmail}`
+        )
+        .then((res) => setTotalArtworks(res.data.length))
+        .catch((err) => console.log(err));
+    }
+  }, [artistEmail]);
+
+  
   useEffect(() => {
     if (user?.email) {
       axios
-        .get(`https://assignment-ten-server-ten-theta.vercel.app/favorites?email=${user.email}`)
+        .get(
+          `https://assignment-ten-server-ten-theta.vercel.app/favorites?email=${user.email}`
+        )
         .then((res) => {
           const exists = res.data.find((fav) => fav.artId === _id);
           if (exists) setIsFavorite(true);
@@ -41,7 +56,6 @@ const ExplorerDetails = () => {
     }
   }, [_id, user]);
 
-  // Handle Like button click
   const handleLike = async () => {
     if (!user?.email) {
       Swal.fire("Please login first", "", "warning");
@@ -54,27 +68,24 @@ const ExplorerDetails = () => {
     }
 
     try {
-      const res = await axios.post(`https://assignment-ten-server-ten-theta.vercel.app/arts/${_id}/like`);
-      console.log(res);
+      const res = await axios.post(
+        `https://assignment-ten-server-ten-theta.vercel.app/arts/${_id}/like`
+      );
       if (res.data) {
-        setLikeCount(res.data.likes); 
-        setLiked(true); 
+        setLikeCount(res.data.likes);
+        setLiked(true);
         Swal.fire({
           title: "Liked ❤️",
           text: `You liked "${title}"`,
           icon: "success",
           confirmButtonColor: "#ec4899",
         });
-      } else {
-        Swal.fire("Failed to like the artwork", "", "error");
       }
     } catch (err) {
-      console.log(err);
       Swal.fire("Error", "Failed to like the artwork", "error");
     }
   };
 
- 
   const handleAddToFavorites = async () => {
     if (!user?.email) {
       Swal.fire("Please login first", "", "warning");
@@ -96,7 +107,10 @@ const ExplorerDetails = () => {
     };
 
     try {
-      const res = await axios.post("https://assignment-ten-server-ten-theta.vercel.app/favorites", favoriteData);
+      const res = await axios.post(
+        "https://assignment-ten-server-ten-theta.vercel.app/favorites",
+        favoriteData
+      );
       if (res.data.success) {
         setIsFavorite(true);
         Swal.fire({
@@ -105,18 +119,14 @@ const ExplorerDetails = () => {
           icon: "success",
           confirmButtonColor: "#ec4899",
         });
-      } else {
-        Swal.fire("Already in Favorites", "", "info");
       }
     } catch (err) {
-      console.log(err);
       Swal.fire("Error", "Failed to add to favorites", "error");
     }
   };
-// design
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-rose-50 to-purple-50 flex flex-col lg:flex-row items-center justify-center px-6 py-12 gap-10">
-     
       <div className="lg:w-1/2 w-full flex flex-col items-center">
         <div className="w-full max-w-md rounded-2xl overflow-hidden shadow-xl bg-white border border-gray-200">
           <img
@@ -127,7 +137,6 @@ const ExplorerDetails = () => {
         </div>
       </div>
 
-     
       <div className="lg:w-1/2 w-full space-y-5">
         <h2 className="text-3xl font-bold text-gray-800">{title}</h2>
         <p className="text-sm text-gray-500 font-medium uppercase tracking-wide">
@@ -157,8 +166,25 @@ const ExplorerDetails = () => {
           </div>
         </div>
 
-        {/* Buttons */}
-        <div className="flex gap-4 mt-6">
+        <div className="mt-10 p-5 bg-white border border-gray-200 rounded-xl shadow-md flex items-center gap-5">
+          <img
+            src={
+              artistPhoto ||
+              "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+            }
+            alt={artist}
+            className="w-16 h-16 rounded-full border-2 border-purple-400 object-cover"
+          />
+          <div>
+            <h3 className="text-lg font-bold text-gray-800">{artist}</h3>
+            <p className="text-gray-600 text-sm">{artistEmail}</p>
+            <p className="text-sm text-purple-600 font-medium">
+              Total Artworks: {totalArtworks}
+            </p>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap gap-4 mt-6">
           <button
             onClick={handleLike}
             disabled={liked}
@@ -182,8 +208,8 @@ const ExplorerDetails = () => {
           >
             ⭐ {isFavorite ? "Added to Favorites" : "Add to Favorites"}
           </button>
-          
         </div>
+
         <Link
           to="/exploreArtworks"
           className="inline-block mt-8 px-6 py-2 bg-gradient-to-r from-pink-400 to-purple-500 text-white font-medium rounded-lg shadow-md hover:scale-105 transition-transform"
