@@ -11,7 +11,7 @@ const MyGallery = () => {
   useEffect(() => {
     if (user?.email) {
       axios
-        .get(`http://localhost:5000/arts?email=${user.email}`)
+        .get(`https://assignment-ten-server-ten-theta.vercel.app/arts?email=${user.email}`)
         .then((res) => setArts(res.data))
         .catch((err) => console.log(err));
     }
@@ -29,7 +29,7 @@ const MyGallery = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`http://localhost:5000/arts/${id}`)
+          .delete(`https://assignment-ten-server-ten-theta.vercel.app/arts/${id}`)
           .then((res) => {
             if (res.data.success) {
               setArts(arts.filter((art) => art._id !== id));
@@ -53,7 +53,7 @@ const MyGallery = () => {
     };
 
     axios
-      .put(`http://localhost:5000/arts/${selectedArt._id}`, updatedData)
+      .put(`https://assignment-ten-server-ten-theta.vercel.app/arts/${selectedArt._id}`, updatedData)
       .then((res) => {
         if (res.data.modifiedCount > 0) {
           setArts(

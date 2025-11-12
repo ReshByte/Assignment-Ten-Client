@@ -13,7 +13,7 @@ const MyFavorites = () => {
   useEffect(() => {
     if (user?.email) {
       axios
-        .get(`http://localhost:5000/favorites?email=${user.email}`)
+        .get(`https://assignment-ten-server-ten-theta.vercel.app/favorites?email=${user.email}`)
         .then((res) => setFavorites(res.data))
         .catch((err) => console.log(err));
     }
@@ -30,7 +30,7 @@ const MyFavorites = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`http://localhost:5000/favorites/${id}`)
+          .delete(`https://assignment-ten-server-ten-theta.vercel.app/favorites/${id}`)
           .then((res) => {
             setFavorites(favorites.filter((fav) => fav._id !== id));
             Swal.fire("Removed!", "Artwork removed from favorites.", "success");

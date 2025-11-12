@@ -32,7 +32,7 @@ const ExplorerDetails = () => {
   useEffect(() => {
     if (user?.email) {
       axios
-        .get(`http://localhost:5000/favorites?email=${user.email}`)
+        .get(`https://assignment-ten-server-ten-theta.vercel.app/favorites?email=${user.email}`)
         .then((res) => {
           const exists = res.data.find((fav) => fav.artId === _id);
           if (exists) setIsFavorite(true);
@@ -54,7 +54,7 @@ const ExplorerDetails = () => {
     }
 
     try {
-      const res = await axios.post(`http://localhost:5000/arts/${_id}/like`);
+      const res = await axios.post(`https://assignment-ten-server-ten-theta.vercel.app/arts/${_id}/like`);
       console.log(res);
       if (res.data) {
         setLikeCount(res.data.likes); 
@@ -96,7 +96,7 @@ const ExplorerDetails = () => {
     };
 
     try {
-      const res = await axios.post("http://localhost:5000/favorites", favoriteData);
+      const res = await axios.post("https://assignment-ten-server-ten-theta.vercel.app/favorites", favoriteData);
       if (res.data.success) {
         setIsFavorite(true);
         Swal.fire({

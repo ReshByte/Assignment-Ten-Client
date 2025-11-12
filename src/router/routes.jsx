@@ -20,13 +20,13 @@ export const router = createBrowserRouter([
       {
         path: "/",
         element: <Home></Home>,
-        loader: () => fetch("http://localhost:5000/arts/latest"),
+        loader: () => fetch("https://assignment-ten-server-ten-theta.vercel.app/arts/latest"),
         hydrateFallbackElement:<Loading></Loading>
       },
       {
         path: "/exploreArtworks",
         element: <ExploreArtworks></ExploreArtworks>,
-        loader: () => fetch("http://localhost:5000/arts"),
+        loader: () => fetch("https://assignment-ten-server-ten-theta.vercel.app/arts"),
         hydrateFallbackElement:<Loading></Loading>
       },
       {
@@ -52,7 +52,7 @@ export const router = createBrowserRouter([
             <MyFavorites></MyFavorites>
           </PrivateRoute>
         ),
-        loader: () => fetch("http://localhost:5000/favorites"),
+        loader: () => fetch("https://assignment-ten-server-ten-theta.vercel.app/favorites"),
         hydrateFallbackElement:<Loading></Loading>
       },
       {
@@ -63,7 +63,7 @@ export const router = createBrowserRouter([
           </PrivateRoute>
         ),
         loader: ({ params }) =>
-          fetch(`http://localhost:5000/arts/${params.id}`),
+          fetch(`https://assignment-ten-server-ten-theta.vercel.app/arts/${params.id}`),
         hydrateFallbackElement:<Loading></Loading>
       },
       {

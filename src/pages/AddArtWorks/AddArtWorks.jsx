@@ -22,7 +22,7 @@ const AddArtWorks = () => {
       email: user?.email
     };
 
-    fetch('http://localhost:5000/arts', {
+    fetch('https://assignment-ten-server-ten-theta.vercel.app/arts', {
       method: 'POST',
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData)

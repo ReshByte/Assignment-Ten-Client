@@ -1,10 +1,10 @@
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Link, NavLink } from "react-router";
 import artify from "../assets/Artify-logo.png";
 import { AuthContext } from "../context/AuthContext";
 
 const Header = () => {
-  const { user, signOutUser } = use(AuthContext);
+  const { user, signOutUser } = useContext(AuthContext);
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
 
   useEffect(() => {
@@ -17,7 +17,7 @@ const Header = () => {
   };
 
   const navLinkClass = ({ isActive }) =>
-    `px-4 py-2 rounded-md font-medium tracking-wide transition-all duration-300 ${
+    `px-4 py-2 rounded-md font-medium tracking-wide transition-all duration-300 block text-center ${
       isActive
         ? "bg-gradient-to-r from-rose-500 to-purple-600 text-white shadow-sm"
         : "text-gray-700 hover:text-purple-700 hover:bg-purple-100"
@@ -25,20 +25,22 @@ const Header = () => {
 
   return (
     <header className="sticky top-0 z-50 bg-gradient-to-r from-rose-50 via-white to-purple-50 backdrop-blur-md border-b border-purple-100 shadow-sm">
-      <div className=" px-28">
-        <nav className="flex items-center justify-between py-3 md:py-4">
-          <Link to="/" className="flex items-center gap-2">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 lg:px-16 xl:px-24">
+        <nav className="flex items-center justify-between py-3">
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-2 shrink-0">
             <img
               src={artify}
               alt="Artify logo"
-              className="h-12 w-12 rounded-full border-2 border-purple-200 shadow-sm"
+              className="h-10 w-10 sm:h-12 sm:w-12 rounded-full border-2 border-purple-200 shadow-sm"
             />
-            <span className="text-2xl md:text-3xl font-extrabold bg-gradient-to-r from-rose-600 to-purple-700 bg-clip-text text-transparent">
+            <span className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-rose-600 to-purple-700 bg-clip-text text-transparent">
               Artify
             </span>
           </Link>
 
-          <ul className="hidden md:flex items-center gap-2">
+          {/* Desktop Nav */}
+          <ul className="hidden md:flex items-center gap-2 lg:gap-3">
             <li><NavLink to="/" className={navLinkClass}>Home</NavLink></li>
             <li><NavLink to="/exploreArtworks" className={navLinkClass}>Explore</NavLink></li>
             <li><NavLink to="/addArtworks" className={navLinkClass}>Add Artwork</NavLink></li>
@@ -46,7 +48,9 @@ const Header = () => {
             <li><NavLink to="/myFavorites" className={navLinkClass}>Favorites</NavLink></li>
           </ul>
 
-          <div className="flex items-center gap-3">
+          {/* Right Section */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            {/* Theme Toggle */}
             <label className="swap swap-rotate">
               <input
                 type="checkbox"
@@ -69,66 +73,95 @@ const Header = () => {
               </svg>
             </label>
 
+            {/* User Avatar */}
             {user && (
-              <div className="tooltip tooltip-bottom" data-tip={user.displayName || "User"}>
+              <div
+                className="tooltip tooltip-bottom hidden sm:block"
+                data-tip={user.displayName || "User"}
+              >
                 <img
                   src={
                     user.photoURL ||
                     "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
                   }
                   alt="User"
-                  className="w-10 h-10 rounded-full border-2 border-purple-400 hover:scale-105 shadow-sm transition-transform"
+                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border-2 border-purple-400 hover:scale-105 shadow-sm transition-transform"
                 />
               </div>
             )}
 
-            {user ? (
-              <button
-                onClick={signOutUser}
-                className="btn btn-sm bg-gradient-to-r from-purple-600 to-rose-500 border-none text-white font-medium shadow-sm hover:from-rose-500 hover:to-purple-600 transition-all"
-              >
-                Logout
-              </button>
-            ) : (
-              <>
-                <Link
-                  to="/auth/login"
-                  className="btn btn-sm bg-gradient-to-r from-purple-600 to-rose-500 border-none text-white font-medium shadow-sm hover:from-rose-500 hover:to-purple-600"
+            {/* Auth Buttons */}
+            <div className="hidden sm:flex items-center gap-2">
+              {user ? (
+                <button
+                  onClick={signOutUser}
+                  className="btn btn-xs sm:btn-sm bg-gradient-to-r from-purple-600 to-rose-500 border-none text-white font-medium shadow-sm hover:from-rose-500 hover:to-purple-600"
                 >
-                  Login
-                </Link>
-                <Link
-                  to="/auth/register"
-                  className="btn btn-sm bg-gradient-to-r from-rose-500 to-purple-600 border-none text-white font-medium shadow-sm hover:from-purple-600 hover:to-rose-500"
-                >
-                  Register
-                </Link>
-              </>
-            )}
-          </div>
-
-          <div className="dropdown md:hidden">
-            <div tabIndex={0} role="button" className="btn btn-ghost">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 text-purple-700"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-8 6h8" />
-              </svg>
+                  Logout
+                </button>
+              ) : (
+                <>
+                  <Link
+                    to="/auth/login"
+                    className="btn btn-xs sm:btn-sm bg-gradient-to-r from-purple-600 to-rose-500 border-none text-white font-medium shadow-sm hover:from-rose-500 hover:to-purple-600"
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    to="/auth/register"
+                    className="btn btn-xs sm:btn-sm bg-gradient-to-r from-rose-500 to-purple-600 border-none text-white font-medium shadow-sm hover:from-purple-600 hover:to-rose-500"
+                  >
+                    Register
+                  </Link>
+                </>
+              )}
             </div>
-            <ul
-              tabIndex={0}
-              className="menu menu-sm dropdown-content right-0 mt-3 w-52 bg-white rounded-box shadow-lg border border-purple-100"
-            >
-              <li><NavLink to="/" className={navLinkClass}>Home</NavLink></li>
-              <li><NavLink to="/exploreArtworks" className={navLinkClass}>Explore</NavLink></li>
-              <li><NavLink to="/addArtworks" className={navLinkClass}>Add Artwork</NavLink></li>
-              <li><NavLink to="/myGallery" className={navLinkClass}>My Gallery</NavLink></li>
-              <li><NavLink to="/myFavorites" className={navLinkClass}>Favorites</NavLink></li>
-            </ul>
+
+            {/* Mobile Dropdown */}
+            <div className="dropdown dropdown-end md:hidden">
+              <div tabIndex={0} role="button" className="btn btn-ghost p-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6 text-purple-700"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M4 6h16M4 12h16m-8 6h8"
+                  />
+                </svg>
+              </div>
+              <ul
+                tabIndex={0}
+                className="menu menu-sm dropdown-content right-0 mt-3 w-56 bg-white rounded-box shadow-lg border border-purple-100"
+              >
+                <li><NavLink to="/" className={navLinkClass}>Home</NavLink></li>
+                <li><NavLink to="/exploreArtworks" className={navLinkClass}>Explore</NavLink></li>
+                <li><NavLink to="/addArtworks" className={navLinkClass}>Add Artwork</NavLink></li>
+                <li><NavLink to="/myGallery" className={navLinkClass}>My Gallery</NavLink></li>
+                <li><NavLink to="/myFavorites" className={navLinkClass}>Favorites</NavLink></li>
+                <div className="divider my-1"></div>
+                {!user ? (
+                  <>
+                    <li><NavLink to="/auth/login" className={navLinkClass}>Login</NavLink></li>
+                    <li><NavLink to="/auth/register" className={navLinkClass}>Register</NavLink></li>
+                  </>
+                ) : (
+                  <li>
+                    <button
+                      onClick={signOutUser}
+                      className="btn btn-sm bg-gradient-to-r from-purple-600 to-rose-500 border-none text-white w-full"
+                    >
+                      Logout
+                    </button>
+                  </li>
+                )}
+              </ul>
+            </div>
           </div>
         </nav>
       </div>

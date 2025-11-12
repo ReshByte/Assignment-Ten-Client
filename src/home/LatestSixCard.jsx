@@ -9,7 +9,7 @@ const LatestSixCard = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/arts/latest")
+      .get("https://assignment-ten-server-ten-theta.vercel.app/arts/latest")
       .then((res) => setArts(res.data))
       .catch((err) => console.error(err));
 
