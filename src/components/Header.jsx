@@ -25,9 +25,9 @@ const Header = () => {
 
   return (
     <header className="sticky top-0 z-50 bg-gradient-to-r from-rose-50 via-white to-purple-50 backdrop-blur-md border-b border-purple-100 shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 lg:px-16 xl:px-24">
+      <div className="max-w-[1480px] mx-auto px-4 sm:px-6 md:px-10 lg:px-16 xl:px-24">
         <nav className="flex items-center justify-between py-3">
-          {/* Logo */}
+       
           <Link to="/" className="flex items-center gap-2 shrink-0">
             <img
               src={artify}
@@ -39,7 +39,7 @@ const Header = () => {
             </span>
           </Link>
 
-          {/* Desktop Nav */}
+       
           <ul className="hidden md:flex items-center gap-2 lg:gap-3">
             <li><NavLink to="/" className={navLinkClass}>Home</NavLink></li>
             <li><NavLink to="/exploreArtworks" className={navLinkClass}>Explore</NavLink></li>
@@ -48,9 +48,9 @@ const Header = () => {
             <li><NavLink to="/myFavorites" className={navLinkClass}>Favorites</NavLink></li>
           </ul>
 
-          {/* Right Section */}
+        
           <div className="flex items-center gap-2 sm:gap-3">
-            {/* Theme Toggle */}
+           
             <label className="swap swap-rotate">
               <input
                 type="checkbox"
@@ -73,7 +73,7 @@ const Header = () => {
               </svg>
             </label>
 
-            {/* User Avatar */}
+
             {user && (
               <div
                 className="tooltip tooltip-bottom hidden sm:block"
@@ -90,8 +90,7 @@ const Header = () => {
               </div>
             )}
 
-            {/* Auth Buttons */}
-            <div className="hidden sm:flex items-center gap-2">
+             <div className="hidden sm:flex items-center gap-2">
               {user ? (
                 <button
                   onClick={signOutUser}
@@ -117,7 +116,7 @@ const Header = () => {
               )}
             </div>
 
-            {/* Mobile Dropdown */}
+           
             <div className="dropdown dropdown-end md:hidden">
               <div tabIndex={0} role="button" className="btn btn-ghost p-1">
                 <svg
