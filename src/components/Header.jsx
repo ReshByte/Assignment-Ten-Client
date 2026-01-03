@@ -1,170 +1,159 @@
-import React, { useEffect, useState, useContext } from "react";
-import { Link, NavLink } from "react-router";
-import artify from "../assets/Artify-logo.png";
+import { NavLink, Link } from "react-router";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
+import artify from "../assets/Artify-logo.png";
 
 const Header = () => {
   const { user, signOutUser } = useContext(AuthContext);
-  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
-  const [showTooltip, setShowTooltip] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [theme, setTheme] = useState(
+    localStorage.getItem("theme") || "light"
+  );
 
+  // Apply theme
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
   }, [theme]);
 
-  const handleThemeToggle = (checked) => {
-    setTheme(checked ? "dark" : "light");
-  };
-
-  const navLinkClass = ({ isActive }) =>
-    `px-4 py-2 rounded-md font-medium tracking-wide transition-all duration-300 block text-center ${
+  const navClass = ({ isActive }) =>
+    `px-4 py-2 rounded-md font-medium transition block ${
       isActive
-        ? "bg-gradient-to-r from-rose-500 to-purple-600 text-white shadow-sm"
-        : "text-gray-700 hover:text-purple-700 hover:bg-purple-100"
+        ? "bg-purple-600 text-white"
+        : "text-gray-800 hover:bg-purple-100"
     }`;
 
   return (
-    <header className="sticky top-0 z-50 bg-gradient-to-r from-rose-50 via-white to-purple-50 backdrop-blur-md border-b border-purple-100 shadow-sm">
-      <div className="max-w-[1480px] mx-auto px-4 sm:px-6 md:px-10 lg:px-16 xl:px-24">
-        <nav className="flex items-center justify-between py-3">
-          <Link to="/" className="flex items-center gap-2 shrink-0">
-            <img
-              src={artify}
-              alt="Artify logo"
-              className="h-10 w-10 sm:h-12 sm:w-12 rounded-full border-2 border-purple-200 shadow-sm"
-            />
-            <span className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-rose-600 to-purple-700 bg-clip-text text-transparent">
+    <header className="sticky top-0 z-50 w-full bg-gradient-to-r from-purple-50 to-rose-50 shadow-md">
+      <div className="max-w-7xl mx-auto px-4">
+        <nav className="flex items-center justify-between h-16">
+          
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-2">
+            <img src={artify} className="h-10 w-10" alt="logo" />
+            <span className="text-2xl font-bold text-purple-700">
               Artify
             </span>
           </Link>
 
-          <ul className="hidden md:flex items-center gap-2 lg:gap-3">
-            <li><NavLink to="/" className={navLinkClass}>Home</NavLink></li>
-            <li><NavLink to="/exploreArtworks" className={navLinkClass}>Explore</NavLink></li>
-            <li><NavLink to="/addArtworks" className={navLinkClass}>Add Artwork</NavLink></li>
-            <li><NavLink to="/myGallery" className={navLinkClass}>My Gallery</NavLink></li>
-            <li><NavLink to="/myFavorites" className={navLinkClass}>Favorites</NavLink></li>
-          </ul>
-
-          <div className="flex items-center gap-2 sm:gap-3">
-            <label className="swap swap-rotate">
-              <input
-                type="checkbox"
-                checked={theme === "dark"}
-                onChange={(e) => handleThemeToggle(e.target.checked)}
-              />
-              <svg
-                className="swap-on fill-current w-6 h-6 text-yellow-400"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-              >
-                <path d="M5.64 17.657l1.414-1.414-1.414-1.414-1.414 1.414 1.414 1.414zm12.728-12.728l1.414-1.414-1.414-1.414-1.414 1.414 1.414 1.414zM12 5a1 1 0 011-1h0a1 1 0 010 2h0a1 1 0 01-1-1zm0 12a1 1 0 011-1h0a1 1 0 010 2h0a1 1 0 01-1-1zm6-6a1 1 0 011-1h0a1 1 0 010 2h0a1 1 0 01-1-1zm-12 0a1 1 0 011-1h0a1 1 0 010 2h0a1 1 0 01-1-1zm9.071 5.071l1.414-1.414-1.414-1.414-1.414 1.414 1.414 1.414zm-9.9-9.9l1.414-1.414-1.414-1.414-1.414 1.414 1.414 1.414zM12 7a5 5 0 100 10 5 5 0 000-10z"/>
-              </svg>
-              <svg
-                className="swap-off fill-current w-6 h-6 text-gray-800"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-              >
-                <path d="M21.752 15.002A9 9 0 1112 3a7 7 0 009.752 12.002z"/>
-              </svg>
-            </label>
+          {/* Desktop Menu */}
+          <ul className="hidden md:flex items-center gap-2">
+            <li><NavLink to="/" className={navClass}>Home</NavLink></li>
+            <li><NavLink to="/exploreArtworks" className={navClass}>Explore</NavLink></li>
+            <li><NavLink to="/about" className={navClass}>About</NavLink></li>
 
             {user && (
-              <div
-                className="relative"
-                onMouseEnter={() => setShowTooltip(true)}
-                onMouseLeave={() => setShowTooltip(false)}
-                onTouchStart={() => setShowTooltip(!showTooltip)}
-              >
-                <img
-                  src={
-                    user.photoURL ||
-                    "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-                  }
-                  alt="User"
-                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border-2 border-purple-400 hover:scale-105 shadow-sm transition-transform cursor-pointer"
-                />
-                {showTooltip && (
-                  <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-purple-700 text-white text-xs px-2 py-1 rounded-md shadow-lg whitespace-nowrap">
-                    {user.displayName || "User"}
-                  </div>
-                )}
-              </div>
+              <>
+                <li><NavLink to="/dashboard" className={navClass}>Dashboard</NavLink></li>
+                <li><NavLink to="/addArtworks" className={navClass}>Add Artwork</NavLink></li> {/* Added */}
+                <li><NavLink to="/myGallery" className={navClass}>My Gallery</NavLink></li>
+                <li><NavLink to="/myFavorites" className={navClass}>Favorites</NavLink></li>
+              </>
             )}
+          </ul>
 
-            <div className="hidden sm:flex items-center gap-2">
-              {user ? (
-                <button
-                  onClick={signOutUser}
-                  className="btn btn-xs sm:btn-sm bg-gradient-to-r from-purple-600 to-rose-500 border-none text-white font-medium shadow-sm hover:from-rose-500 hover:to-purple-600"
-                >
-                  Logout
-                </button>
-              ) : (
-                <>
-                  <Link
-                    to="/auth/login"
-                    className="btn btn-xs sm:btn-sm bg-gradient-to-r from-purple-600 to-rose-500 border-none text-white font-medium shadow-sm hover:from-rose-500 hover:to-purple-600"
-                  >
-                    Login
-                  </Link>
-                  <Link
-                    to="/auth/register"
-                    className="btn btn-xs sm:btn-sm bg-gradient-to-r from-rose-500 to-purple-600 border-none text-white font-medium shadow-sm hover:from-purple-600 hover:to-rose-500"
-                  >
-                    Register
-                  </Link>
-                </>
-              )}
-            </div>
+          {/* Right Side */}
+          <div className="flex items-center gap-3">
+            
+            {/* Theme Toggle */}
+            <button
+              onClick={() =>
+                setTheme(theme === "light" ? "dark" : "light")
+              }
+              className="btn btn-ghost text-xl"
+              title="Toggle Theme"
+            >
+              {theme === "light" ? "🌙" : "☀️"}
+            </button>
 
-            <div className="dropdown dropdown-end md:hidden">
-              <div tabIndex={0} role="button" className="btn btn-ghost p-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-purple-700"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
+            {!user ? (
+              <>
+                <Link
+                  to="/auth/login"
+                  className="btn btn-sm bg-purple-600 text-white hover:bg-purple-700"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M4 6h16M4 12h16m-8 6h8"
+                  Login
+                </Link>
+
+                <Link
+                  to="/auth/register"
+                  className="btn btn-sm border-2 border-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white"
+                >
+                  Register
+                </Link>
+              </>
+            ) : (
+              /* Profile Dropdown */
+              <div className="dropdown dropdown-end">
+                <label tabIndex={0}>
+                  <img
+                    src={user.photoURL}
+                    alt="profile"
+                    className="w-10 h-10 rounded-full border-2 border-purple-500 cursor-pointer"
                   />
-                </svg>
-              </div>
-              <ul
-                tabIndex={0}
-                className="menu menu-sm dropdown-content right-0 mt-3 w-56 bg-white rounded-box shadow-lg border border-purple-100"
-              >
-                <li><NavLink to="/" className={navLinkClass}>Home</NavLink></li>
-                <li><NavLink to="/exploreArtworks" className={navLinkClass}>Explore</NavLink></li>
-                <li><NavLink to="/addArtworks" className={navLinkClass}>Add Artwork</NavLink></li>
-                <li><NavLink to="/myGallery" className={navLinkClass}>My Gallery</NavLink></li>
-                <li><NavLink to="/myFavorites" className={navLinkClass}>Favorites</NavLink></li>
-                <div className="divider my-1"></div>
-                {!user ? (
-                  <>
-                    <li><NavLink to="/auth/login" className={navLinkClass}>Login</NavLink></li>
-                    <li><NavLink to="/auth/register" className={navLinkClass}>Register</NavLink></li>
-                  </>
-                ) : (
+                </label>
+                <ul
+                  tabIndex={0}
+                  className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
+                >
+                  <li className="font-semibold text-center text-gray-800">
+                    {user.displayName}
+                  </li>
+                  <div className="divider my-1"></div>
+                  <li><NavLink to="/dashboard">Dashboard</NavLink></li>
+                  <li><NavLink to="/addArtworks">Add Artwork</NavLink></li> {/* Added */}
                   <li>
                     <button
                       onClick={signOutUser}
-                      className="btn btn-sm bg-gradient-to-r from-purple-600 to-rose-500 border-none text-white w-full"
+                      className="text-red-500"
                     >
                       Logout
                     </button>
                   </li>
-                )}
-              </ul>
-            </div>
+                </ul>
+              </div>
+            )}
+
+            {/* Mobile Menu Button */}
+            <button
+              className="md:hidden btn btn-ghost text-2xl"
+              onClick={() => setMenuOpen(!menuOpen)}
+            >
+              ☰
+            </button>
           </div>
         </nav>
+
+        {/* Mobile Menu */}
+        {menuOpen && (
+          <ul className="md:hidden pb-4 space-y-2">
+            <li><NavLink to="/" className={navClass}>Home</NavLink></li>
+            <li><NavLink to="/exploreArtworks" className={navClass}>Explore</NavLink></li>
+            <li><NavLink to="/about" className={navClass}>About</NavLink></li>
+
+            {user ? (
+              <>
+                <li><NavLink to="/dashboard" className={navClass}>Dashboard</NavLink></li>
+                <li><NavLink to="/addArtworks" className={navClass}>Add Artwork</NavLink></li> {/* Added */}
+                <li><NavLink to="/myGallery" className={navClass}>My Gallery</NavLink></li>
+                <li><NavLink to="/myFavorites" className={navClass}>Favorites</NavLink></li>
+                <li>
+                  <button
+                    onClick={signOutUser}
+                    className="btn btn-sm w-full btn-error text-white"
+                  >
+                    Logout
+                  </button>
+                </li>
+              </>
+            ) : (
+              <>
+                <li><NavLink to="/auth/login" className={navClass}>Login</NavLink></li>
+                <li><NavLink to="/auth/register" className={navClass}>Register</NavLink></li>
+              </>
+            )}
+          </ul>
+        )}
       </div>
     </header>
   );

@@ -1,77 +1,113 @@
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, ArrowDown } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Link } from "react-router";
 
 const images = [
-  "https://i.ibb.co/Z69s8bWs/pexels-photo-7763082.jpg",
-  "https://i.ibb.co/6ctc0c1n/pexels-nazila-18540736.jpg",
-  "https://i.ibb.co/FbfxsJPS/pexels-steve-2130475.jpg",
+  {
+    src: "https://i.ibb.co/Z69s8bWs/pexels-photo-7763082.jpg",
+    title: "Discover Stunning Art",
+    desc: "Explore creativity from talented artists worldwide",
+  },
+  {
+    src: "https://i.ibb.co/6ctc0c1n/pexels-nazila-18540736.jpg",
+    title: "Share Your Artwork",
+    desc: "Upload, showcase, and grow your artistic journey",
+  },
+  {
+    src: "https://i.ibb.co/FbfxsJPS/pexels-steve-2130475.jpg",
+    title: "Build Your Gallery",
+    desc: "Save favorites and curate your own collection",
+  },
 ];
 
 const Banner = () => {
   const [current, setCurrent] = useState(0);
 
-  // Auto-play the carousel every 6 seconds
+  // Auto slide
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % images.length);
-    }, 6000);
-    return () => clearInterval(interval);
+    const timer = setInterval(
+      () => setCurrent((prev) => (prev + 1) % images.length),
+      6000
+    );
+    return () => clearInterval(timer);
   }, []);
 
   const prevSlide = () =>
     setCurrent((current - 1 + images.length) % images.length);
-  const nextSlide = () => setCurrent((current + 1) % images.length);
+  const nextSlide = () =>
+    setCurrent((current + 1) % images.length);
 
   return (
-    <div className="absolute w-full flex top-0 left-0 justify-center mt-30">
-      <div className="max-w-7xl mx-auto">
-        <div className="relative w-full overflow-hidden rounded-2xl shadow-2xl">
-          <div
-            className="flex transition-transform duration-700 ease-in-out"
-            style={{ transform: `translateX(-${current * 100}%)` }}
-          >
-            {images.map((src, i) => (
-              <div key={i} className="w-full shrink-0 relative">
-                <img
-                  src={src}
-                  alt={`Slide ${i + 1}`}
-                  className="w-full h-[60vh] object-cover brightness-90"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+    <section className="relative w-full h-[65vh] overflow-hidden">
+      
+      {/* Slides */}
+      <div
+        className="flex h-full transition-transform duration-700 ease-in-out"
+        style={{ transform: `translateX(-${current * 100}%)` }}
+      >
+        {images.map((item, i) => (
+          <div key={i} className="w-full h-full shrink-0 relative">
+            <img
+              src={item.src}
+              alt={item.title}
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-black/10" />
+
+            {/* Text + CTA */}
+            <div className="absolute inset-0 flex items-center">
+              <div className="max-w-7xl mx-auto px-6 text-white">
+                <h1 className="text-3xl md:text-5xl font-bold mb-4 animate-fadeIn">
+                  {item.title}
+                </h1>
+                <p className="max-w-md mb-6 text-lg opacity-90">
+                  {item.desc}
+                </p>
+                <Link
+                  to="/exploreArtworks"
+                  className="inline-block px-6 py-3 bg-purple-600 hover:bg-purple-700 rounded-md font-semibold transition"
+                >
+                  Explore Now
+                </Link>
               </div>
-            ))}
+            </div>
           </div>
-
-          {/* Navigation Buttons */}
-          <button
-            onClick={prevSlide}
-            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/40 text-white p-2 rounded-full transition"
-          >
-            <ChevronLeft className="w-6 h-6" />
-          </button>
-          <button
-            onClick={nextSlide}
-            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/40 text-white p-2 rounded-full transition"
-          >
-            <ChevronRight className="w-6 h-6" />
-          </button>
-
-          {/* Dots indicator */}
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-            {images.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setCurrent(i)}
-                className={`h-2 w-2 rounded-full transition-all ${
-                  current === i ? "bg-white w-4" : "bg-white/50"
-                }`}
-              />
-            ))}
-          </div>
-        </div>
+        ))}
       </div>
-      <div className="mb-[500px]"></div>
-    </div>
+
+      {/* Navigation Arrows */}
+      <button
+        onClick={prevSlide}
+        className="absolute left-5 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/40 text-white p-3 rounded-full"
+      >
+        <ChevronLeft />
+      </button>
+
+      <button
+        onClick={nextSlide}
+        className="absolute right-5 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/40 text-white p-3 rounded-full"
+      >
+        <ChevronRight />
+      </button>
+
+      {/* Dots */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3">
+        {images.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setCurrent(i)}
+            className={`h-2 rounded-full transition-all ${
+              current === i ? "w-6 bg-white" : "w-2 bg-white/50"
+            }`}
+          />
+        ))}
+      </div>
+
+      {/* Scroll Hint */}
+      <div className="absolute bottom-2 left-1/2 -translate-x-1/2 animate-bounce text-white opacity-80">
+        <ArrowDown />
+      </div>
+    </section>
   );
 };
 
